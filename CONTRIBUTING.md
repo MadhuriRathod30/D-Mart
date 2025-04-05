@@ -1,16 +1,16 @@
-# 🛠️ Contributing to D-Mart
+# 🛠️ Contributing to S-Mart
 
 Hi there! 👋  
 
-We're thrilled that you'd like to contribute to **D-Mart** — your help makes this project better for everyone! Whether it's fixing bugs, building new features, improving documentation, or suggesting ideas — all contributions are welcome.
+We're thrilled that you'd like to contribute to **S-Mart** — your help makes this project better for everyone! Whether it's fixing bugs, building new features, improving documentation, or suggesting ideas — all contributions are welcome.
 
 ## 🚀 Getting Started
 
 1. **Fork** this repository by clicking the "Fork" button on the top right.  
 2. **Clone** your fork to your local machine:
 
-   git clone https://github.com/your-username/D-Mart.git
-   cd D-Mart
+   git clone https://github.com/your-username/S-Mart.git
+   cd S-Mart
 
 3.Create a new branch:
 
@@ -87,4 +87,4 @@ bug, enhancement, question – Clear issue types
 Thanks for contributing! 💙
 
 Happy coding!
-– The D-Mart Team 🛒
+– The S-Mart Team 🛒
