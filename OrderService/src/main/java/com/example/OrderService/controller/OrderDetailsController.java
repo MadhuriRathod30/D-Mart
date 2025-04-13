@@ -1,9 +1,11 @@
 package com.example.OrderService.controller;
 
 import com.example.OrderService.model.OrderDetails;
+import com.example.OrderService.model.OrderResponse;
 import com.example.OrderService.model.OrderStatus;
-import com.example.OrderService.repository.OrderDetailsRepository;
 import com.example.OrderService.repository.OrderStatusRepository;
+import com.example.OrderService.service.OrderDetailsService;
+import com.example.OrderService.service.OrderStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,31 +21,35 @@ import java.time.LocalDateTime;
 public class OrderDetailsController {
 
     @Autowired
-    OrderDetailsRepository orderDetailsRepository;
+    OrderDetailsService orderDetailsService;
 
     @Autowired
-    OrderStatusRepository orderStatusRepository;
+    OrderStatusService orderStatusService;
 
     @PostMapping("/create")
-    public ResponseEntity<OrderDetails> createOrder(@RequestBody OrderDetailsRequestBody request){
+    public ResponseEntity<String> createOrder(@RequestBody OrderDetailsRequestBody request){
 
-        OrderDetails orderDetails = new OrderDetails();
-        orderDetails.setItemName(request.getItemName());
-        orderDetails.setCreatedAt(LocalDateTime.now());
-        orderDetails.setQuantity(request.Quantity);
-        orderDetails.setCustomerId(request.CustomerID);
+        if(request.getCustomerID() == 0 ||request.getItemName()==null ||request.Quantity ==0){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing Customer ID or items");
+        }
 
-        OrderDetails saveOrder = orderDetailsRepository.save(orderDetails);
+
+
+        try{
+            OrderResponse response = orderDetailsService.placeOrder(orderDetails);
+
+        }
+
 
         OrderStatus status = new OrderStatus();
         status.setOrderID(saveOrder.getOrderId());
         status.setStatusOrd("CREATED");
         status.setDateTime(LocalDateTime.now());
 
-        OrderStatus saveStatus = orderStatusRepository.save(status);
+        OrderStatus saveStatus = orderStatusService.UpdateStatus(status);
 
-        System.out.print("save order :" + saveOrder);
-        System.out.print("save status :" + saveStatus);
+
+
         return ResponseEntity.status(HttpStatus.CREATED).body(saveOrder);
     }
 

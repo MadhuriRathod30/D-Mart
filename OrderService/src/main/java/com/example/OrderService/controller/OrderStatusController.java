@@ -2,6 +2,7 @@ package com.example.OrderService.controller;
 
 import com.example.OrderService.model.OrderStatus;
 import com.example.OrderService.repository.OrderStatusRepository;
+import com.example.OrderService.service.OrderStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,17 +17,18 @@ import java.time.LocalDateTime;
 public class OrderStatusController {
 
     @Autowired
-    OrderStatusRepository orderStatusRepository;
+    OrderStatusService orderStatusService;
 
     @PostMapping("/update")
     public ResponseEntity<OrderStatus> changeStatus(@RequestBody OrderStatusRequestBody request){
 
         OrderStatus orderStatus = new OrderStatus();
+
         orderStatus.setOrderID(request.OrderID);
         orderStatus.setStatusOrd(request.getStatus());
         orderStatus.setDateTime(LocalDateTime.now());
 
-        OrderStatus savedStatus = orderStatusRepository.save(orderStatus);
+        OrderStatus savedStatus = orderStatusService.UpdateStatus(orderStatus);
         return ResponseEntity.ok(savedStatus);
 
     }
