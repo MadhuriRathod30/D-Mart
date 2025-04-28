@@ -12,11 +12,9 @@ import java.time.LocalDateTime;
 @Document("Order_Status")
 public class OrderStatus {
 
-    @Id
-    private String ID;
-
-    private String OrderID;
-    private String statusOrd;
+    private String orderID;
+    private String status;
     private LocalDateTime dateTime;
+
 
 }

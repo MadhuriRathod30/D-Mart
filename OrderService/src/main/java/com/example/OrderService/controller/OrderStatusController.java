@@ -4,13 +4,12 @@ import com.example.OrderService.model.OrderStatus;
 import com.example.OrderService.repository.OrderStatusRepository;
 import com.example.OrderService.service.OrderStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/order-status")
@@ -19,18 +18,31 @@ public class OrderStatusController {
     @Autowired
     OrderStatusService orderStatusService;
 
-    @PostMapping("/update")
-    public ResponseEntity<OrderStatus> changeStatus(@RequestBody OrderStatusRequestBody request){
+    @Autowired
+    OrderStatusRepository orderStatusRepository;
 
-        OrderStatus orderStatus = new OrderStatus();
 
-        orderStatus.setOrderID(request.OrderID);
-        orderStatus.setStatusOrd(request.getStatus());
-        orderStatus.setDateTime(LocalDateTime.now());
+    @GetMapping("/get")
+    public ResponseEntity<String> getStatus(@RequestParam("order_id") String orderId){
 
-        OrderStatus savedStatus = orderStatusService.UpdateStatus(orderStatus);
-        return ResponseEntity.ok(savedStatus);
+        String status;
 
+        status = orderStatusService.getOrderStatus(orderId);
+
+        if(status != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(status);
+        }else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order not found");
+        }
+    }
+
+    @GetMapping("/allOrder")
+    public List<OrderStatus> getAllOrderStatus(){
+        List<OrderStatus> ls = new ArrayList<>();
+
+        ls = orderStatusRepository.findAll();
+
+        return ls;
     }
 
 

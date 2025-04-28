@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDetailsRequestBody {
-
-    private int customerID;
-    private String itemName;
-    private int quantity;
+public class ResponseBody {
+    int orderId;
+    int CustomerID;
+    String itemName;
+    int Quantity;
 }
