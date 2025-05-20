@@ -9,12 +9,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
 @Data
-@Document("Order_Status")
+@Document("status")
 public class OrderStatus {
 
-    private String orderID;
+    private String orderId;
     private String status;
     private LocalDateTime dateTime;
-
 
 }

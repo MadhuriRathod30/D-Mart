@@ -7,15 +7,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
 @Data
-@Document("order_list")
+@Document("orders")
 public class OrderDetails {
 
     @Id
     private String orderId;
-
     private int customerId;
     private String itemName;
     private int quantity;
-
     private LocalDateTime createdAt;
 }

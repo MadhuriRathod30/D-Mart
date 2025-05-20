@@ -1,57 +1,39 @@
 package com.example.OrderService.controller;
 
+import com.example.OrderService.exception.EntityNotFoundException;
 import com.example.OrderService.model.OrderDetails;
-import com.example.OrderService.repository.OrderDetailsRepository;
-import com.example.OrderService.service.OrderDetailsService;
-import com.example.OrderService.service.OrderStatusService;
-import com.example.OrderService.service.Producer;
+import com.example.OrderService.service.OrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/order")
 public class OrderDetailsController {
 
     @Autowired
-    OrderDetailsRepository orderDetailsRepository;
+    OrderService orderService;
 
-
-    @Autowired
-    OrderDetailsService orderDetailsService;
-
-    @Autowired
-    Producer producer;
-
-    @GetMapping("/allOrder")
-    public List<OrderDetails> getAllOrder(){
-
-        List<OrderDetails> ls  = new ArrayList<>();
-        ls = orderDetailsRepository.findAll();
-
-        return ls;
-
+    @PostMapping
+    public ResponseEntity<Object> createOrder(@RequestBody OrderDetails request) {
+        log.info("Creating the order request={}", request);
+        OrderDetails orderDetails = orderService.createOrder(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(request);
     }
 
-    @Autowired
-    OrderStatusService orderStatusService;
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getOrderEntity(@PathVariable("id") String orderId) {
+        OrderDetails response;
+        try {
+            response = orderService.getOrderEntity(orderId);
+        } catch (EntityNotFoundException entityNotFoundException) {
+            log.error("Could not find entity for orderId={}", orderId);
+            return new ResponseEntity<>(entityNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
+        }
 
-    @PostMapping("/create")
-    public ResponseEntity<ResponseBody> createOrder(@RequestBody OrderDetails request){
-
-        ResponseBody responseBody = orderDetailsService.createOrder(request);
-
-        producer.MessageToKafkaTopic("Order is created with orderID" + request.getOrderId());
-
-        orderStatusService.setOrderStatus(request);
-
-        return  ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-
-
 }

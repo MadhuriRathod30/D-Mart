@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface OrderStatusRepository extends MongoRepository<OrderStatus , String> {
-
-    Optional<OrderStatus> findByOrderID(String orderID);
+public interface OrderStatusRepository extends MongoRepository<OrderStatus, String> {
+    Optional<OrderStatus> findByOrderId(String orderId);
 }
